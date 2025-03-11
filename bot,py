@@ -1,0 +1,41 @@
+import os
+import logging
+from telegram import Update
+from telegram.ext import Updater, CommandHandler, CallbackContext
+
+# Ambil token dari environment variable
+API_TOKEN = os.getenv(8143070697:AAHN8_sSZQYSidkjBPdfFyGSuP41TCI6-Ss)
+
+# Logging
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+# Fungsi saat pengguna mengetik /start
+def start(update: Update, context: CallbackContext) -> None:
+    update.message.reply_text("Halo! Saya bot trading Anda. Gunakan /signal untuk mendapatkan sinyal trading.")
+
+# Fungsi untuk mengirim sinyal trading
+def send_signal(update: Update, context: CallbackContext) -> None:
+    signal = "📊 **Sinyal Trading Hari Ini:**\n\n" \
+             "📌 **PAIR:** XAU/USD\n" \
+             "📈 **Arah:** BUY\n" \
+             "💲 **Entry:** 1800.00\n" \
+             "🎯 **Take Profit:** 1810.00\n" \
+             "🛑 **Stop Loss:** 1795.00\n\n" \
+             "⚡ Gunakan strategi dengan bijak!"
+    update.message.reply_text(signal, parse_mode="Markdown")
+
+# Fungsi utama bot
+def main():
+    updater = Updater(API_TOKEN, use_context=True)
+    dp = updater.dispatcher
+
+    dp.add_handler(CommandHandler("start", start))
+    dp.add_handler(CommandHandler("signal", send_signal))
+
+    updater.start_polling()
+    updater.idle()
+
+if __name__ == "__main__":
+    main()
